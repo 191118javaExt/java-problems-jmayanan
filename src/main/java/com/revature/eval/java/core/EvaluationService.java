@@ -1,6 +1,8 @@
 package com.revature.eval.java.core;
 
+import java.io.IOException;
 import java.time.temporal.Temporal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,10 +16,16 @@ public class EvaluationService {
 	 * @return
 	 */
 	public String reverse(String string) {
-		
-		return "";
+		int j = string.length();
+        char[] newWord = new char[j];
+        for (int i = 0; i < string.length(); i++) {
+            newWord[--j] = string.charAt(i);
+        }
+        return new String(newWord);
 	}
-
+	
+	
+	
 	/**
 	 * 2. Convert a phrase to its acronym. Techies love their TLA (Three Letter
 	 * Acronyms)! Help generate some jargon by writing a program that converts a
@@ -28,6 +36,15 @@ public class EvaluationService {
 	 */
 	public String acronym(String phrase) {
 		// TODO Write an implementation for this method declaration
+		if (phrase.length() == 0) 
+            return null; 
+  
+        //split the string using 'space'  
+        //and print the first character of every word 
+        String words[] = phrase.split(" "); 
+        for(String word : words) { 
+            System.out.print(Character.toUpperCase(word.charAt(0)) + " "); 
+        } 
 		return null;
 	}
 
@@ -121,9 +138,84 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int getScrabbleScore(String string) {
-		// TODO Write an implementation for this method declaration
-		return 0;
-	}
+
+		int score = 0;
+
+		for(int i = 0; i < string.length(); i++) {
+		char letter = string.charAt(i);
+		switch(letter) {
+		case 'a':
+		case 'A':
+		case 'e':
+		case 'E':
+		case 'i':
+		case 'I':
+		case 'o':
+		case 'O':
+		case 'u':
+		case 'U':
+		case 'l':
+		case 'L':
+		case 'n':
+		case 'N':
+		case 'r':
+		case 'R':
+		case 's':
+		case 'S':
+		case 't':
+		case 'T':
+		score += 1;
+		break;
+		case 'd':
+		case 'D':
+		case 'g':
+		case 'G':
+		score += 2;
+		break;
+		case 'b':
+		case 'B':
+		case 'c':
+		case 'C':
+		case 'm':
+		case 'M':
+		case 'p':
+		case 'P':
+		score += 3;
+		break;
+		case 'f':
+		case 'F':
+		case 'h':
+		case 'H':
+		case 'v':
+		case 'V':
+		case 'w':
+		case 'W':
+		case 'y':
+		case 'Y':
+		score += 4;
+		break;
+		case 'k':
+		case 'K':
+		score += 5;
+		break;
+		case 'j':
+		case 'J':
+		case 'x':
+		case 'X':
+		score += 8;
+		break;
+		case 'q':
+		case 'Q':
+		case 'z':
+		case 'Z':
+		score += 10;
+		break;
+		}
+		}
+
+		return score;
+		}
+
 
 	/**
 	 * 5. Clean up user-entered phone numbers so that they can be sent SMS messages.
@@ -172,6 +264,17 @@ public class EvaluationService {
 	 */
 	public Map<String, Integer> wordCount(String string) {
 		// TODO Write an implementation for this method declaration
+		 String s = "olly olly in come free";
+	        String a[] = s.split(" ");
+	        Map<String, Integer> words = new HashMap<>();
+	        for (String str11 : a) {
+	            if (words.containsKey(str11)) {
+	                words.put(str11, 1 + words.get(str11));
+	            } else {
+	                words.put(str11, 1);
+	            }
+	        }
+	        System.out.println(words);
 		return null;
 	}
 
@@ -250,10 +353,68 @@ public class EvaluationService {
 	 * @param string
 	 * @return
 	 */
-	public String toPigLatin(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
-	}
+	 public static String toPigLatin(String s) {
+		    String latin = "";
+		    int i = 0;
+		    while (i<s.length()) {
+		 
+		      // Take care of punctuation and spaces
+		      while (i<s.length() && !isLetter(s.charAt(i))) {
+		        latin = latin + s.charAt(i);
+		        i++;
+		      }
+		 
+		      // If there aren't any words left, stop.
+		      if (i>=s.length()) break;
+		 
+		      // Otherwise we're at the beginning of a word.
+		      int begin = i;
+		      while (i<s.length() && isLetter(s.charAt(i))) {
+		        i++;
+		      }
+		 
+		      // Now we're at the end of a word, so translate it.
+		      int end = i;
+		      latin = latin + pigWord(s.substring(begin, end));
+		    }
+		    return latin;
+		  }
+		 
+		  /**
+		   * Method to test whether a character is a letter or not.
+		   * @param c The character to test
+		   * @return True if it's a letter
+		   */
+		  private static boolean isLetter(char c) {
+		    return ( (c >='A' && c <='Z') || (c >='a' && c <='z') );
+		  }
+		 
+		  /**
+		   * Method to translate one word into pig latin.
+		   * @param word The word in english
+		   * @return The pig latin version
+		   */
+		  private static String pigWord(String word) {
+		    int split = firstVowel(word);
+		    return word.substring(split)+word.substring(0, split)+"ay";
+		  }
+		 
+		  /**
+		   * Method to find the index of the first vowel in a word.
+		   * @param word The word to search
+		   * @return The index of the first vowel
+		   */
+		  private static int firstVowel(String word) {
+		    word = word.toLowerCase();
+		    for (int i=0; i<word.length(); i++)
+		      if (word.charAt(i)=='a' || word.charAt(i)=='e' ||
+		          word.charAt(i)=='i' || word.charAt(i)=='o' ||
+		          word.charAt(i)=='u')
+		        return i;
+		    return 0;
+		  }
+		 
+		
 
 	/**
 	 * 9. An Armstrong number is a number that is the sum of its own digits each
@@ -270,10 +431,26 @@ public class EvaluationService {
 	 * @param input
 	 * @return
 	 */
-	public boolean isArmstrongNumber(int input) {
-		// TODO Write an implementation for this method declaration
-		return false;
-	}
+		  public boolean isArmstrongNumber(int input) {
+
+			  String number = String.valueOf(input);
+			     char[] arr = number.toCharArray();
+
+			     int sum = 0;
+			   
+			     int power = arr.length;
+
+			     for (int i = 0; i < arr.length; i++) {
+			         int digit = Character.digit(arr[i], 10);
+			         sum = sum + (int) Math.pow(digit, power);
+			     }
+
+			     if (sum == input) {
+			         return true;
+			     } else {
+			         return false;
+			     }
+			  }
 
 	/**
 	 * 10. Compute the prime factors of a given natural number.
@@ -285,9 +462,33 @@ public class EvaluationService {
 	 * @param l
 	 * @return
 	 */
-	public List<Long> calculatePrimeFactorsOf(long l) {
-		// TODO Write an implementation for this method declaration
+	public List calculatePrimeFactorsOf(long l) 
+    { 
+        // Print the number of 2s that divide n 
+        while (l%2==0) 
+        { 
+            System.out.print(2 + " "); 
+            l /= 2; 
+        } 
+  
+        // n must be odd at this point.  So we can 
+        // skip one element (Note i = i +2) 
+        for (int i = 3; i <= Math.sqrt(l); i+= 2) 
+        { 
+            // While i divides n, print i and divide n 
+            while (l%i == 0) 
+            { 
+                System.out.print(i + " "); 
+                l /= i; 
+            } 
+        } 
+  
+        // This condition is to handle the case whien 
+        // n is a prime number greater than 2 
+        if (l > 2) 
+            System.out.print(l);
 		return null;
+        }
 	}
 
 	/**
@@ -329,8 +530,7 @@ public class EvaluationService {
 			return null;
 		}
 
-	}
-
+	
 	/**
 	 * 12. Given a number n, determine what the nth prime is.
 	 * 
@@ -420,9 +620,45 @@ public class EvaluationService {
 	 * @return
 	 */
 	public boolean isValidIsbn(String string) {
-		// TODO Write an implementation for this method declaration
-		return false;
-	}
+    	int value = 0;
+    	int position = 10;
+    	for (int i = 0; i < string.length(); i++) {
+    		// return false if there are more than 10 ISBN digits
+    		if (position < 1) {
+    			return false;
+    		}
+    		char valueAtI = string.charAt(i);
+    		if  (valueAtI != '-') {
+    			int isbnDigit = 0;
+    			try {
+    				isbnDigit = getISBNDigit(valueAtI);
+    			}
+    			catch(IllegalArgumentException e) {
+    				// Non-numeric character other than X encountered.  Validation should fail.
+    				return false;
+    			}
+    			// X can only appear in the last position as a check character
+    			if (isbnDigit == 10 && position > 1) {
+    				return false;
+    			}
+    			value += isbnDigit * (position--);
+    		}
+    	}
+    	return value % 11 == 0;
+    }
+    
+    private int getISBNDigit(char value) throws IllegalArgumentException {
+		if (value == 'X') {
+			return 10;
+		}
+		else if (Character.isDigit(value)){
+			return Character.getNumericValue(value);
+		}
+		else {
+			throw new IllegalArgumentException("All characters in the string other than digits and X should fail validation");
+		}
+    }
+	
 
 	/**
 	 * 16. Determine if a sentence is a pangram. A pangram (Greek: παν γράμμα, pan
@@ -542,8 +778,98 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int solveWordProblem(String string) {
-		// TODO Write an implementation for this method declaration
-		return 0;
-	}
 
+		int index = 0;
+
+		int operand1, operand2;
+
+		String wordProblem;
+
+		String operator = "";
+
+		String[] brokenUpProblem;
+
+		
+
+		// Identify index of first operator
+
+		while(string.charAt(index) != '-' && string.charAt(index) != '0' && string.charAt(index) != '1'
+
+				&& string.charAt(index) != '2' && string.charAt(index) != '3' && string.charAt(index) != '4'
+
+				&& string.charAt(index) != '5' && string.charAt(index) != '6' && string.charAt(index) != '7'
+
+				&& string.charAt(index) != '8' && string.charAt(index) != '9') {
+
+			index++;
+
+		}
+
+		
+
+		// Find and discard question mark if it exist
+
+		if(string.charAt(string.length() - 1) == '?') {
+
+			wordProblem = string.substring(index, string.length() - 2);
+
+		}
+
+		wordProblem = string.substring(index, string.length() - 1);
+
+		
+
+		// Split word problem and assign operands and operator
+
+		brokenUpProblem = wordProblem.split(" ");
+
+		
+
+		operand1 = Integer.parseInt(brokenUpProblem[0]);
+
+		operand2 = Integer.parseInt(brokenUpProblem[brokenUpProblem.length - 1]);
+
+		
+
+		for(int i = 0; i < brokenUpProblem.length;i++) {
+
+			if(brokenUpProblem[i].equals("minus") || brokenUpProblem[i].equals("plus")
+
+					|| brokenUpProblem[i].equals("multiplied") || brokenUpProblem[i].equals("divided")) {
+
+				operator = brokenUpProblem[i];
+
+			}
+
+		}
+
+		
+
+		// Perform operations
+
+		
+
+		switch(operator) {
+
+		case "minus":
+
+			return operand1 - operand2;
+
+		case "plus":
+
+			return operand1 + operand2;
+
+		case "multiplied":
+
+			return operand1 * operand2;
+
+		case "divided":
+
+			return operand1 / operand2;
+
+		}
+
+		return 0;
+
+	}
 }
